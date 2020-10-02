@@ -1,1 +1,19 @@
+@import "./sassConfig.scss";
 @import "./normalize.scss";
+@import "./icon.scss";
+
+// float
+.pull-right { float: right; }
+.pull-left { float: left; }
+
+// fs-24
+.fs-24 {
+	font-size: 24px;
+}
+
+// position:relative
+.p-r { position: relative; }
+.p-a { position: absolute; }
+
+// clearfix
+.clearfix { @extend %clearfix; }
