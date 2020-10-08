@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- Cars Data -->
-		<!-- <Cars/> -->
+		<Cars/>
 		<!-- Map地图 -->
 		<Map/>
 		<!-- 导航 -->
