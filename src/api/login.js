@@ -5,7 +5,7 @@ import service from "../utils/request";
 export function GetCode(data){
     return service.request({
         method: "post",
-        url: "getCode/",
+        url: `${process.env.VUE_APP_API_LOGIN}/getCode/`,
         data
     })
 }
@@ -27,7 +27,7 @@ export function Register(data){
 export function Login(data){
     return service.request({
         method: "post",
-        url: "login/",
+        url: `${process.env.VUE_APP_API_LOGIN}/login/`,
         data
     })
 }

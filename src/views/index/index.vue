@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- Cars Data -->
-		<Cars/>
+		<!-- <Cars/> -->
 		<!-- Map地图 -->
-		<Map/>
+		<Map @callback="callbackComponent"/>
 		<!-- 导航 -->
 		<Navbar/>
 		<!-- 会员 -->
@@ -12,7 +12,7 @@
 			<router-view/>
 		</div>
 		<!-- login -->
-		<Login/>
+		<!-- <Login/> -->
 	</div>
 </template>
 <script>
@@ -22,6 +22,7 @@ import Cars from "../cars";
 import Navbar from "@c/navbar";
 // 引入登录界面： api utils login
 import Login from "./login";
+import { Parking } from "@/api/parking";
 export default {
 	name: "Index",
 	components: {Map,Cars,Navbar,Login},  // 这是个函数，ES6的对象优化写法
@@ -36,12 +37,30 @@ export default {
 		document.addEventListener('mouseup', (e)=>{
 			const userCon = document.getElementById("children-view");
 			if(userCon && !userCon.contains(e.target)) {
+				// 路由的重复跳转会报错
+				const routeName = this.$route.name;
+				if(routeName === "Index") { return false; }
 				this.$router.push({
 					name: "Index"
 				})
 			}
 		})
-	}
+	},
+	methods: {
+		callbackComponent(params) {
+			params.function && this[params.function](params.data);  
+		},
+		loadMap() {
+			this.getParking();
+		},
+		getParking() {
+			Parking().than(response => {
+
+			})
+		}
+	},
+
+
 	// watch: {
 	// 	"$route": {
 	// 		handler(newValue) {

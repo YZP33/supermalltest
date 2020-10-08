@@ -6,7 +6,7 @@ import { Message } from 'element-ui';
 // 创建实例
 const service = axios.create({
     // 拦截器
-    baseURL: process.env.VUE_APP_API_LOGIN,    // 请求地址
+    baseURL: "",    // 请求地址
     timeout: 5000,  // 超时
 });
 
