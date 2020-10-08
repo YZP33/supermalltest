@@ -2,7 +2,7 @@
 	<div class="cars-wrap">
 		<div class="cars-swiper-wrap">
 			<swiper class="swiper" :options="swiperOption">
-				<swiper-slide><CarsItem height="800px"/></swiper-slide>
+				<swiper-slide><CarsItem height="900px"/></swiper-slide>
 				<swiper-slide><CarsItem/></swiper-slide>
 				<swiper-slide><CarsItem/></swiper-slide>
 				<swiper-slide><CarsItem/></swiper-slide>
@@ -39,7 +39,7 @@ export default {
 			this.$router.push({
 				name: "User"
 			})
-		}
+		}	
 	}
 }
 </script>

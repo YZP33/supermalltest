@@ -108,6 +108,10 @@
 	right: 0;
 	padding-top: 0;
 	bottom: 0;
+	.scroll { 
+		height: 100%;
+		overflow-y: auto;
+	}
 	.column {
 		position: relative;
 		padding: 26px 0 20px;
@@ -138,6 +142,8 @@
 		}
 	}
 	.cars-electric-box {
+		position: relative;
+		margin-top: 17px;
 		padding: 15px;
 		border-radius: 100px;
 		background-color: #fff;
@@ -149,12 +155,65 @@
 			border-radius: 100px;
 		}
 		.e-high {
+			display: block;
 			position: absolute;
 			left: 0;
 			top: 0;
 			background-color: #0f9cee;
 			height: 100%;
 			border-radius: 100px;
+		}
+
+	}
+	.info {
+		margin: 32px 0 28px;
+	}
+	.select-car-btn {
+		position: absolute;
+		left: 50%;
+		margin-left: -120px;
+		bottom: -42px;
+	}
+
+}
+.cars-type-list {
+	li {
+		height: 43px;
+		padding: 0 17px 0 20px;
+		margin-bottom: 15px;
+		background-color: #f3f3f3;
+		border-color: #f3f3f3;
+		border-style: solid;
+		border-width: 2px;
+		border-radius: 10px;
+		font-size: 16px;
+		line-height: 43px;
+		&.current {
+			border-color: #0f9cee;
+		}
+	}	
+	.name { float: left; }
+	.price { float: right; }
+}
+.clause-dec {
+	@extend %clearfix;
+	i {
+		width: 20px;
+		height: 20px;
+		border-radius: 100px;
+		background-color: #cccccc;
+		&.current {
+			background-color: $color-main;
+		}
+		&:before {
+			content: "";
+			display: block;
+			width: 8px;
+			height: 4px;
+			margin: 6px 0 0 5px;
+			border-left: 2px solid #fff;
+			border-bottom: 2px solid #fff;
+			@include webkit(transform, rotate(-45deg)); 
 		}
 
 	}
