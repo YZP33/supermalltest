@@ -63,7 +63,7 @@ module.exports = {
       // 后端接口： http://www.web-jshtml.cn/api/cars
       [process.env.VUE_APP_API_LOGIN]: {
           target: process.env.VUE_API_DEV_LOGIN_TARGET, //API服务器的地址
-          changeOrigin: true,
+          changeOrigin: true,  // // 是否改变域名
           pathRewrite: {
               [`^${process.env.VUE_APP_API_LOGIN}`]: ''
           }

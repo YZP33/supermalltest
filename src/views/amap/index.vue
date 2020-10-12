@@ -1,6 +1,7 @@
 <template>
 	<div class="amap-wrap">
 		<el-amap vid="amapContainer" :amap-manager="amapManager"  :zoom="zoom" :events="events" class="amap-demo">
+			<!-- 覆盖物 - 圆 -->
 			<el-amap-circle 
 				v-for="item in circle"
 				:key="item.id"
@@ -12,13 +13,35 @@
 				:strokeWeight="item.strokeWeight"
 			>
 			</el-amap-circle>
+			<!-- 覆盖物 - 停车场 -->
+			<el-amap-marker 
+				v-for="(item, index) in parking" 
+				:key="item.id" 
+				:content="item.content"
+				:position="item.position" 
+				:offset="item.offset"
+				:vid="index"
+			>
+			</el-amap-marker>
+			<!-- 覆盖物 - 停车场 - 车辆数 -->
+			<el-amap-marker
+				v-for="(item, index) in parking"
+				:key="item.id + '-2'"
+				:content="item.text"
+				:position="item.position" 
+				:events="item.events"
+				:offset="item.tOffset"
+				:vid="index"
+			>
+			</el-amap-marker>
 		</el-amap>
 	</div>
 </template>
 <script>
 //npm方式
 import {AMapManager, lazyAMapApiLoaderInstance} from "vue-amap";
-
+import {selfLocation} from "./location"
+import {Walking} from "./walking"
 let amapManager = new AMapManager() // 新建生成地图画布
 export default {
 	name: "Amap",
@@ -27,12 +50,12 @@ export default {
 		return {
 			map: null,
 			amapManager,
-			center: [121.499855,31.237651],
+			center: [118.12464,24.458289],
 			zoom: 18,
 			events: {
 				// o是高德地图的实例，通过这种方法可以将原生SDK和vue-amap结合起来使用
 				init(o) {
-						// 这样就可以使用高德地图原生的方法了
+					// 这样就可以使用高德地图原生的方法了
 					lazyAMapApiLoaderInstance.load().then(() => {
 						self.initPage(); // 初始化数据self指向this
 					});
@@ -47,48 +70,58 @@ export default {
 					strokeWeight: "30"
 				}
 			]
+			// parking: []
 		}
 	},
 	methods: {
 		initPage() {
 			this.map = amapManager.getMap();
 
-			// 地图加载完成
+			//地图加载完成
 			this.$emit("callback", {
 				function: "loadMap"
 			})
 
-	        var geolocation = new AMap.Geolocation({
-	            enableHighAccuracy: true,//是否使用高精度定位，默认:true
-	            timeout: 10000,          //超过10秒后停止定位，默认：5s
-	            buttonPosition:'RB',    //定位按钮的停靠位置
-	            buttonOffset: new AMap.Pixel(10, 20),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
-	            zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
-	            markerOptions: {
-	            	content: " "
-	            }
-	        });
-	        this.map.addControl(geolocation);
-	        geolocation.getCurrentPosition((status,result) => {
-	            if(status=='complete'){
-	            	console.log("11111111");
-	                const lng = result.position.lng;
-	                const lat = result.position.lat;
-	                this.circle[0].center = [lng,lat];
-	            }else{
-	                // onError(result)
-	                console.log("222222");
-	    //             alert(JSON.stringify(result));
-					// document.getElementById('tip').innerHTML = '定位失败';
-	            }
-	        });
+			this.selfLocation2();
 
 			// let marker = new AMap.Marker({
 			// 	position: [121.499855,31.237651]
-			// });
+			// });·	
 			// // 覆盖物	
 			// marker.setMap(this.map);
 			// console.log('11111111');
+		},
+		selfLocation2() {
+			selfLocation({
+				map: this.map,
+				complete: (val) => this.onComplete(val)
+			})
+		},
+		onComplete(data) {
+	        const lng = data.position.lng;
+	        const lat = data.position.lat;	
+	        this.circle[0].center = [ lng, lat ];
+	        console.log([lng, lat])	
+			console.log("获取当前位置成功");
+		},
+		handlerWalking() {
+			Walking({
+				map: this.map,
+				position_start: [118.12464,24.458289],
+				position_end: [118.098332,24.456609]
+			})
+		},
+		error(err) {
+			console.log("获取当前位置失败");
+		},
+		// parkingData(data) {
+		// 	this.parking = data;
+		// }
+	},
+	props: {
+		parking: {
+			type: Array,
+			default: () => {[]}
 		}
 	},
 	mounted() {
@@ -99,7 +132,15 @@ export default {
 		// 		center: [121.499855,31.237651]
 		// 	});
 		// });
-	}
+	},
+	watch: {
+		"$store.state.location.selfLocation": {
+			handler(){
+				this.selfLocation2();
+			}
+		}
+	} 
+
 }
 </script>
 <style lang="scss">

@@ -6,7 +6,7 @@ import { Message } from 'element-ui';
 // 创建实例
 const service = axios.create({
     // 拦截器
-    baseURL: "",    // 请求地址
+    baseURL: "",    // 请求地址 多个ip接口时设置为空
     timeout: 5000,  // 超时
 });
 

@@ -3,7 +3,7 @@
 		<!-- Cars Data -->
 		<!-- <Cars/> -->
 		<!-- Map地图 -->
-		<Map @callback="callbackComponent"/>
+		<Map ref="map" :parking="parkingData" @callback="callbackComponent"/>
 		<!-- 导航 -->
 		<Navbar/>
 		<!-- 会员 -->
@@ -12,7 +12,7 @@
 			<router-view/>
 		</div>
 		<!-- login -->
-		<!-- <Login/> -->
+		<Login/>
 	</div>
 </template>
 <script>
@@ -26,6 +26,11 @@ import { Parking } from "@/api/parking";
 export default {
 	name: "Index",
 	components: {Map,Cars,Navbar,Login},  // 这是个函数，ES6的对象优化写法
+	data() {
+		return {
+			parkingData: []
+		}
+	},
 	computed: {
 		show() {
 			const router = this.$route;
@@ -54,9 +59,29 @@ export default {
 			this.getParking();
 		},
 		getParking() {
-			Parking().than(response => {
-
+			Parking().then(response => {
+				const data = response.data.data;
+				data.forEach(item => {
+					item.position = item.lnglat.split(',');
+					// 动态渲染img使用require
+					item.content = "<img src='"+ require('@/assets/images/parking_location_img.png') +"' />";
+					item.offset = [-35, -60];
+					item.tOffset = [-30, -55];
+					item.text = `<div style="width: 60px; font-size: 20px; color: #fff; line-height: 50px; text-align: center">${item.carsNumber}</div>`;
+					item.events = {
+						click: (e) => this.aaa(e)
+					}
+				});
+				this.parkingData = data;
+				// 父组件调用子组件方法
+				// 用ref调用子组件的parkingData，把data传进去 
+				// this.$refs.map.parkingData(data);
 			})
+
+		},
+		aaa(e) {
+			console.log(e.target.getExtData());
+			this.$refs.map.handlerWalking(e);
 		}
 	},
 
